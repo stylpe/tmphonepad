@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trackmania Phone Pad</title>
+    <!-- <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap-reboot.min.css"> -->
+    <link rel="stylesheet" href="style.css">
+    <script async defer src="controller.js"></script>
+</head>
+
+<body>
+    <svg id="main" width=100dvw height=100dvh stroke-width=1em stroke-linejoin=round>
+
+      <rect x=0 y=0 width=100% height=100% fill=black stroke=lightblue stroke-width=10% />
+      <svg viewBox="-100 -100 200 200" x=5% y=5% width=90% height=90% preserveAspectRatio="none" overflow="visible">
+        <defs>
+          <clipPath id="clip">
+            <use href="#poly"/>
+          </clipPath>
+        </defs>
+        <polygon id="poly" vector-effect="non-scaling-stroke" stroke="black" stroke-width=5% fill="darkblue"
+          points="0,-100 90,-5 100,-5 100,5 90,5 0,100 -90,5 -100,5 -100,-5 -90,-5" />
+        <rect id="filler" fill="darkgreen" clip-path="url(#clip)" x=0 y=-100 width=0 height=200 />
+      </svg>
+      <text id="text" x=1% y=99%>0.00</text>
+    </svg>
+    <button id="fullscreen">Fullscreen</button>
+</body>
+
+</html>

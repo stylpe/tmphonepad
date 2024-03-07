@@ -1,0 +1,15 @@
+
+<svg id="controllerSvg"
+    @onpointermove="@PointerMove"
+    @onpointermove:preventDefault="true"
+    @onpointermove:stopPropagation="true"
+     width="100vw" height="100vh"
+    >
+    <rect fill="#aaf" />
+    <text x="0" y="1em">x: @x</text>
+    <text x="0" y="2em">y: @y</text>
+    <text x="0" y="3em">buttons: @buttons</text>
+    <text x="0" y="4em">pid: @pid</text>
+    <rect x="@x" y="@y" width="10" height="10" fill="red"></rect>
+    <path stroke="black" d="M 0,0 L @x,@y  "></path>
+</svg>
