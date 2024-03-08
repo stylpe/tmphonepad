@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using QRCoder;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddSimpleConsole(c=>c.SingleLine=true);
 var app = builder.Build();
 app.Logger.LogInformation("Starting...");
 
