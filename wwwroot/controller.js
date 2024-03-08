@@ -40,7 +40,7 @@ function start() {
         ev.preventDefault();
         if (!ev.isPrimary) return;
 
-        const margin = 0.9, deadzone = 0.9
+        const margin = 0.9, deadzone = 0.75
 
         const rect = svg.getBoundingClientRect();
         const offset = ((ev.offsetX * 2 - rect.width)) / (rect.width * margin);
