@@ -4,6 +4,7 @@
 }
 
 html {
+  font-family: "Lucida Console", Courier, monospace;
   font-size: 14px;
   position: relative;
   min-height: 100%;
@@ -19,11 +20,10 @@ body { margin: 0; padding: 0; }
 
 svg, svg * {
   touch-action: none;
-  font-family: "Lucida Console", Courier, monospace;
 }
 
 #fullscreen {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 1em;
+  left: 1em;
 }
