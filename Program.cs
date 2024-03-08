@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using QRCoder;
 
@@ -7,14 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 app.Logger.LogInformation("Starting...");
 
-// TODO: More possibilities (none, more than one)
-var domain = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
-    .Where(it => it.OperationalStatus == System.Net.NetworkInformation.OperationalStatus.Up)
-    .Select(it => it.GetIPProperties().DnsSuffix)
-    .Where(it => !string.IsNullOrEmpty(it))
-    .Distinct()
-    .Single();
-// var host = $"http://{Environment.MachineName.ToLowerInvariant()}.{domain}:7384/";
 var addresses = Dns.GetHostEntry("").AddressList
 .Where(ip=>ip.AddressFamily == AddressFamily.InterNetwork).Distinct().ToList();
 if (addresses.Count == 0) throw new PlatformNotSupportedException("Can't find any local IP");
@@ -24,11 +15,10 @@ app.Urls.Add(host);
 
 app.UseWebSockets(new WebSocketOptions
 {
-    // AllowedOrigins = { app.Urls.First() },
     KeepAliveInterval = TimeSpan.FromSeconds(1)
 });
-using var controller = new Controller();
 
+using var controller = new Controller();
 app.Use(async (context, next) =>
 {
     var logger = context.RequestServices.GetService<ILogger<Controller>>()!;
@@ -45,7 +35,6 @@ app.Use(async (context, next) =>
 });
 
 app.UseFileServer(new FileServerOptions { StaticFileOptions = { OnPrepareResponse = (ctx) => ctx.Context.Response.GetTypedHeaders().CacheControl = new() { NoStore = true } } });
-
 
 app.Start();
 
