@@ -8,6 +8,8 @@ using Nefarius.ViGEm.Client.Targets.Xbox360;
 
 internal sealed class Controller : IDisposable
 {
+    private static ReadOnlySpan<byte> PING => "ping"u8;
+    private static readonly ArraySegment<byte> PONG = "pong"u8.ToArray();
     public Controller()
     {
         client = new();
@@ -40,17 +42,24 @@ internal sealed class Controller : IDisposable
         while (!ct.IsCancellationRequested && webSocket.State is WebSocketState.Open)
         {
             result = await webSocket.ReceiveAsync(mem, ct);
-            if (result.MessageType == WebSocketMessageType.Close)
+            switch (result.MessageType)
             {
-                logger.LogInformation("Client disconnected");
-                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Bye!", ct);
-                return;
+                case WebSocketMessageType.Close:
+                    logger.LogInformation("Client disconnected");
+                    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Bye!", ct);
+                    return;
+                case WebSocketMessageType.Binary:
+                    CheckResult(result);
+                    short axis = cast(mslice);
+                    logger.LogInformation($"Axis value: {axis}");
+                    // TODO: use channels
+                    controller.SetAxisValue(Xbox360Axis.LeftThumbX, axis);
+                    break;
+                case WebSocketMessageType.Text:
+                    if (mem[..result.Count].Span.SequenceEqual(PING))
+                        await webSocket.SendAsync(PONG, WebSocketMessageType.Text, true, ct);
+                    break;
             }
-            CheckResult(result);
-            short axis = cast(mslice);
-            logger.LogInformation($"Axis value: {axis}");
-            // TODO: use channels
-            controller.SetAxisValue(Xbox360Axis.LeftThumbX, axis);
         }
     }
 

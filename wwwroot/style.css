@@ -18,6 +18,10 @@ body { margin: 0; padding: 0; }
   }
 }
 
+svg {
+  width: 100dvw;
+  height: 100dvh;
+}
 svg, svg * {
   touch-action: none;
 }

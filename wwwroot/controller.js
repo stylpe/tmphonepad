@@ -8,11 +8,11 @@ const isLittleEndian = (() => {
 
 
 function start() {
-
     const svg = document.getElementById("main");
     document.getElementById("fullscreen").addEventListener("click", () => svg.requestFullscreen({ navigationUI: "hide" }));
     const filler = svg.getElementById("filler");
     const text = svg.getElementById("text");
+    const latency = svg.getElementById("latency");
 
     const url = new URL(location.href)
     url.protocol = "ws"
@@ -61,6 +61,18 @@ function start() {
         text.textContent = "0.00"
     }
 
+    var pingMark
+    function ping() {
+        socket.send("ping");
+        pingMark = performance.now();
+    }
+    function pong(ev) {
+        if(ev.data === "pong") {
+            // Calculate input latency as half round trip time of ping
+            latency.textContent = ((performance.now() - pingMark) / 2).toFixed(2);
+        }
+    }
+
     // Connection opened
     socket.addEventListener("open", (opened) => {
         // Initializer to agree on byte order
@@ -76,10 +88,8 @@ function start() {
         svg.addEventListener("pointerup", up, eventOpts);
         svg.addEventListener("pointercancel", up, eventOpts);
 
-        svg.addEventListener("pointerdown", down);
-        svg.addEventListener("pointermove", down);
-        svg.addEventListener("pointerup", up);
-        svg.addEventListener("pointercancel", up);
+        socket.addEventListener("message", pong, { abort, passive: true });
+        setInterval(ping, 1000, eventOpts);
     });
 }
 

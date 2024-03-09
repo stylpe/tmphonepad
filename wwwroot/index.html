@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <svg id="main" width=100dvw height=100dvh stroke-width=1em stroke-linejoin=round>
+    <svg id="main" width=100% height=100% stroke-width=1em stroke-linejoin=round>
 
       <rect x=0 y=0 width=100% height=100% fill=black stroke=lightblue stroke-width=10% />
       <svg viewBox="-100 -100 200 200" x=5% y=5% width=90% height=90% preserveAspectRatio="none" overflow="visible">
@@ -23,7 +23,8 @@
           points="0,-100 75,-5 100,-5 100,5 75,5 0,100 -75,5 -100,5 -100,-5 -75,-5" />
         <rect id="filler" fill="darkgreen" clip-path="url(#clip)" x=0 y=-100 width=0 height=200 />
       </svg>
-      <text id="text" x=1% y=99%>0.00</text>
+      <text x=1% y=99%>Axis value: <tspan id="text">0.00</tspan>%</text>
+      <text x=99% y=99% text-anchor="end">Latency: <tspan id="latency">0.00</tspan>ms</text>
     </svg>
     <button id="fullscreen">Fullscreen</button>
 </body>
