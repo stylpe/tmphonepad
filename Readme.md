@@ -8,7 +8,7 @@ This app uses [ViGEm](https://docs.nefarius.at/projects/ViGEm/) to create a virt
 
 The only controls (for now) are left and right, which moves the virtual gamepad's left stick.
 
-Status: Prototype v1, very bare bones proof of concept. Windows only, requires .Net 8 Runtime to run.
+Status: Prototype v1, very bare bones proof of concept. Windows only, requires .Net 8 Runtime to run. Input delay is about 40-80 ms for my setup, but this should be possible to improve.
 
 ## Usage
 
