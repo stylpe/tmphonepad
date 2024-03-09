@@ -3,12 +3,12 @@ using System.Net.Sockets;
 using QRCoder;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Logging.AddSimpleConsole(c=>c.SingleLine=true);
+builder.Logging.AddSimpleConsole(c => c.SingleLine = true);
 var app = builder.Build();
 app.Logger.LogInformation("Starting...");
 
 var addresses = Dns.GetHostEntry("").AddressList
-.Where(ip=>ip.AddressFamily == AddressFamily.InterNetwork).Distinct().ToList();
+    .Where(ip => ip.AddressFamily == AddressFamily.InterNetwork).Distinct().ToList();
 if (addresses.Count == 0) throw new PlatformNotSupportedException("Can't find any local IP");
 if (addresses.Count > 1) app.Logger.LogWarning("More than one local IP available: {IPs}", addresses);
 var host = $"http://{addresses[0]}:7384/";
@@ -29,13 +29,14 @@ app.Use(async (context, next) =>
         using var webSocket = await context.WebSockets.AcceptWebSocketAsync("tmphonepad");
         await controller.Connect(webSocket, logger, context.RequestAborted);
     }
-    else
-    {
-        await next(context);
-    }
+    else await next(context);
 });
 
-app.UseFileServer(new FileServerOptions { StaticFileOptions = { OnPrepareResponse = (ctx) => ctx.Context.Response.GetTypedHeaders().CacheControl = new() { NoStore = true } } });
+app.UseFileServer(new FileServerOptions
+{
+    StaticFileOptions = { OnPrepareResponse = (ctx) =>
+        ctx.Context.Response.GetTypedHeaders().CacheControl = new() { NoStore = true } }
+});
 
 app.Start();
 
