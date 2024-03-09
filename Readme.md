@@ -38,6 +38,7 @@ Status: Prototype v1, very bare bones proof of concept. Windows only, requires .
 - There are a few TODO comments about robustness and configurability.
 - ✅ I should showcase the input lag you can expect, but my own impression as a filthy casual is that it's pretty decent.
 - It could also be possible to make something equivalent for making your phone act as a bluetooth controller. Drawbacks would be it needs to be an app, and I'm not sure there's broad vendor/hardware compatibility.
+- Rumble?
 - And tbh I don't like the name :P
 
 Suggestions and contributions are welcome!
