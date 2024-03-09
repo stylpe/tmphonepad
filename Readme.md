@@ -4,7 +4,7 @@ A hypothetically superior input device for TrackMania, with both the instant res
 
 This app uses [ViGEm](https://docs.nefarius.at/projects/ViGEm/) to create a virtual game controller device, and serves a tiny web app that you can open on a smartphone or tablet over the local network.
 
-![screenshot](https://github.com/stylpe/tmphonepad/assets/99851/b80f99df-85ee-4034-accf-fcda33214132)
+[Demo](https://github.com/stylpe/tmphonepad/assets/99851/15707cd8-eff5-4f4d-ab6d-e8e301970e49)
 
 The only controls (for now) are left and right, which moves the virtual gamepad's left stick.
 
