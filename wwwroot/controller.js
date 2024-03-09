@@ -55,6 +55,7 @@ function start() {
     }
 
     function up() {
+        ev.preventDefault();
         send(0);
         filler.width.baseVal.value = 0;
         text.textContent = "0.00"
@@ -64,6 +65,16 @@ function start() {
     socket.addEventListener("open", (opened) => {
         // Initializer to agree on byte order
         send(1);
+
+        const abortController = new AbortController();
+        const abort = abortController.signal;
+        socket.addEventListener("close", ev => abortController.abort(ev.reason));
+
+        const eventOpts = { abort, passive: false };
+        svg.addEventListener("pointerdown", down, eventOpts);
+        svg.addEventListener("pointermove", down, eventOpts);
+        svg.addEventListener("pointerup", up, eventOpts);
+        svg.addEventListener("pointercancel", up, eventOpts);
 
         svg.addEventListener("pointerdown", down);
         svg.addEventListener("pointermove", down);
