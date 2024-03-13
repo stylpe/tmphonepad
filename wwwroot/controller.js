@@ -37,13 +37,13 @@ function start() {
     }
 
     function down(ev) {
-        ev.preventDefault();
         if (!ev.isPrimary) return;
+        const x = ev.offsetX;
 
         const margin = 0.9, deadzone = 0.75
 
         const rect = svg.getBoundingClientRect();
-        const offset = ((ev.offsetX * 2 - rect.width)) / (rect.width * margin);
+        const offset = ((x * 2 - rect.width)) / (rect.width * margin);
         const deadzoneOffset = offset / deadzone;
 
         send(Math.round(deadzoneOffset * SHORT_MAX))
@@ -51,14 +51,13 @@ function start() {
         filler.width.baseVal.value = Math.abs(offset) * 100;
         filler.x.baseVal.value = offset < 0 ? offset * 100 : 0;
 
-        text.textContent = clamp(deadzoneOffset * 100, -100, 100).toFixed(2);
+        text.textContent = Math.abs(clamp(deadzoneOffset * 100, -100, 100)).toFixed(2) + "%";
     }
 
     function up() {
-        ev.preventDefault();
         send(0);
         filler.width.baseVal.value = 0;
-        text.textContent = "0.00"
+        text.textContent = "0.00%"
     }
 
     var pingMark
@@ -73,22 +72,22 @@ function start() {
         }
     }
 
+    const abortController = new AbortController();
+    const abort = abortController.signal;
+    socket.addEventListener("close", ev => abortController.abort(ev.reason));
+
     // Connection opened
     socket.addEventListener("open", (opened) => {
         // Initializer to agree on byte order
         send(1);
+ 
+        const eventOpts = { signal: abortController.signal, passive: false,  };
+        document.body.addEventListener("pointerdown", down, eventOpts);
+        document.body.addEventListener("pointermove", down, eventOpts);
+        document.body.addEventListener("pointerup", up, eventOpts);
+        document.body.addEventListener("pointercancel", up, eventOpts)
 
-        const abortController = new AbortController();
-        const abort = abortController.signal;
-        socket.addEventListener("close", ev => abortController.abort(ev.reason));
-
-        const eventOpts = { abort, passive: false };
-        svg.addEventListener("pointerdown", down, eventOpts);
-        svg.addEventListener("pointermove", down, eventOpts);
-        svg.addEventListener("pointerup", up, eventOpts);
-        svg.addEventListener("pointercancel", up, eventOpts);
-
-        socket.addEventListener("message", pong, { abort, passive: true });
+        socket.addEventListener("message", pong, { signal: abortController.signal, passive: true });
         setInterval(ping, 1000, eventOpts);
     });
 }

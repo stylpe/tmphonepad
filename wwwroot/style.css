@@ -25,6 +25,14 @@ svg {
 svg, svg * {
   touch-action: none;
 }
+text, tspan {
+  pointer-events: none;
+  touch-action: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
 
 #fullscreen {
   position: absolute;
